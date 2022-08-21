@@ -1,13 +1,18 @@
-" et Options
+" Set Options
 set number
 set title
-set tabstop=4
+set tabstop=2
 set expandtab
-set shiftwidth=4
+set shiftwidth=2
 set smartindent
 set nobackup
 set hidden
 set noswapfile
+
+" IME Switching
+" let &shell='/usr/bin/bash --login'
+" autocmd InsertLeave * :call system('${zenhan} 0')
+" autocmd CmdlineLeave * :call system('${zenhan} 0')
 
 " Install Plugins
 call plug#begin('~/.vim/plugged')
@@ -20,6 +25,8 @@ Plug 'sainnhe/gruvbox-material'
 " Highlight *.tsx
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'maxmellon/vim-jsx-pretty'
+" Highlight prisma
+Plug 'pantharshit00/vim-prisma'
 " Highlight Filer
 Plug 'nvim-treesitter/nvim-treesitter'
 "Customize Status Bar
@@ -37,6 +44,8 @@ Plug 'tpope/vim-surround'
 Plug 'bronson/vim-trailing-whitespace'
 " Use Git
 Plug 'tpope/vim-fugitive'
+" Use Terminal
+Plug 'kassio/neoterm'
 call plug#end()
 
 " coc.nvim
@@ -72,7 +81,7 @@ let g:fern#renderer = 'nerdfont'
 nmap <C-e> :Fern . -reveal=% -drawer -toggle -width=30<CR>
 
 function! s:init_fern() abort
-    nmap <buffer> s <Plug>(fern-action-open:split)
+    nmap <buffer> h <Plug>(fern-action-open:split)
 endfunction
 
 augroup fern-custom
@@ -87,3 +96,30 @@ let g:ctrlp_cmd = 'CtrlP'
 
 " vim-trailing-whitespace
 autocmd BufWritePre * :FixWhitespace
+
+" neoterm
+let g:neoterm_autoinsert = 1
+let g:neoterm_autoscroll = 1
+let g:neoterm_default_mod = 'belowright'
+nnoremap <C-t><C-t> :Ttoggle<CR>
+nnoremap <C-t>t :OpenNTerm t<CR>
+nnoremap <C-t>h :OpenNTerm h<CR>
+nnoremap <C-t>s :OpenNTerm s<CR>
+tnoremap <C-t><C-t> <C-\><C-n>:Ttoggle<CR>
+tnoremap <Esc> <C-\><C-n>
+command! -nargs=1 OpenNTerm call s:open_nterm(<f-args>)
+
+function! s:open_nterm(open_type)
+  let l:tmp = g:neoterm_default_mod
+  echo a:open_type
+
+  if a:open_type == 't'
+    let g:neoterm_default_mod = 'tab'
+  elseif a:open_type == 'h'
+    let g:neoterm_default_mod = 'aboveleft'
+  elseif a:open_type == 's'
+    let g:neoterm_default_mod = 'vertical'
+  endif
+  Tnew
+  let g:neoterm_default_mod = l:tmp
+endfunction
