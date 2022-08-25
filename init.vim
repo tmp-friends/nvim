@@ -8,6 +8,8 @@ set smartindent
 set nobackup
 set hidden
 set noswapfile
+set completeopt=menuone,noinsert
+set clipboard+=unnamed
 
 " IME Switching
 " let &shell='/usr/bin/bash --login'
@@ -16,39 +18,42 @@ set noswapfile
 
 " Install Plugins
 call plug#begin('~/.vim/plugged')
-" Language Server Protocol
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-" Colorscheme
-Plug 'morhetz/gruvbox'
-Plug 'sainnhe/gruvbox-material'
-" Highlight *.tsx
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'maxmellon/vim-jsx-pretty'
-" Highlight prisma
-Plug 'pantharshit00/vim-prisma'
-" Highlight Filer
-Plug 'nvim-treesitter/nvim-treesitter'
-"Customize Status Bar
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-" Filer
-Plug 'lambdalisue/fern.vim'
-Plug 'lambdalisue/nerdfont.vim'
-Plug 'lambdalisue/fern-renderer-nerdfont.vim'
-" Fuzzy Finder
-Plug 'ctrlpvim/ctrlp.vim'
-" Simple Edit Surround
-Plug 'tpope/vim-surround'
-" Trim WhiteSpace
-Plug 'bronson/vim-trailing-whitespace'
-" Use Git
-Plug 'tpope/vim-fugitive'
-" Use Terminal
-Plug 'kassio/neoterm'
+  " Language Server Protocol
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+  " Colorscheme
+  Plug 'morhetz/gruvbox'
+  Plug 'sainnhe/gruvbox-material'
+  " Highlight *.tsx
+  Plug 'HerringtonDarkholme/yats.vim'
+  Plug 'maxmellon/vim-jsx-pretty'
+  " Highlight prisma
+  Plug 'pantharshit00/vim-prisma'
+  " Highlight Filer
+  Plug 'nvim-treesitter/nvim-treesitter'
+  "Customize Status Bar
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  " Filer
+  Plug 'lambdalisue/fern.vim'
+  Plug 'lambdalisue/nerdfont.vim'
+  Plug 'lambdalisue/fern-renderer-nerdfont.vim'
+  " Fuzzy Finder
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+  " Simple Edit Surround
+  Plug 'tpope/vim-surround'
+  " Trim WhiteSpace
+  Plug 'bronson/vim-trailing-whitespace'
+  " Use Git
+  Plug 'tpope/vim-fugitive'
+  " Use Terminal
+  Plug 'kassio/neoterm'
 call plug#end()
 
 " coc.nvim
+let g:coc_global_extensions = ['coc-tsserver', 'coc-eslint8', 'coc-prettier']
+
 nmap <silent> <c-j> <Plug>(coc-definition)
 nmap <silent> <c-w><c-h> :call CocAction('jumpDefinition', 'split')<CR>
 nmap <silent> <c-w><c-v> :call CocAction('jumpDefinition', 'vsplit')<CR>
@@ -78,7 +83,7 @@ nmap <C-k> <Plug>AirlineSelectNextTabn
 let g:fern_disable_startup_warnings = 1
 let g:fern#default_hidden = 1
 let g:fern#renderer = 'nerdfont'
-nmap <C-e> :Fern . -reveal=% -drawer -toggle -width=30<CR>
+nmap <silent> <C-e> :Fern . -reveal=% -drawer -toggle -width=30<CR>
 
 function! s:init_fern() abort
     nmap <buffer> h <Plug>(fern-action-open:split)
@@ -90,9 +95,16 @@ augroup fern-custom
     autocmd VimEnter * ++nested Fern . -reveal=% -drawer -toggle -width=30
 augroup END
 
-" ctrlp
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
+" fzf
+nnoremap <C-p>p :GFiles<CR>
+nnoremap <C-p>f :Files<CR>
+nnoremap <C-p>c :Commits<CR>
+nnoremap <C-p>b :Buffers<CR>
+let g:fzf_buffers_jump = 1
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-h': 'split',
+  \ 'ctrl-e': 'vsplit' }
 
 " vim-trailing-whitespace
 autocmd BufWritePre * :FixWhitespace
