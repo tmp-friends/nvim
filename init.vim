@@ -20,17 +20,15 @@ set clipboard+=unnamed
 call plug#begin('~/.vim/plugged')
   " Language Server Protocol
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
   " Colorscheme
-  Plug 'morhetz/gruvbox'
-  Plug 'sainnhe/gruvbox-material'
+  " Plug 'sainnhe/gruvbox'
+  " Highlight Filer
+  Plug 'nvim-treesitter/nvim-treesitter'
   " Highlight *.tsx
   Plug 'HerringtonDarkholme/yats.vim'
   Plug 'maxmellon/vim-jsx-pretty'
   " Highlight prisma
   Plug 'pantharshit00/vim-prisma'
-  " Highlight Filer
-  Plug 'nvim-treesitter/nvim-treesitter'
   "Customize Status Bar
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
@@ -85,13 +83,12 @@ inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float
 vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1, 1) : "\<C-f>"
 vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0, 1) : "\<C-b>"
 
-" gruvbox
-colorscheme gruvbox
+" default
+colorscheme default
 
 " vim-airline
-let g:airlie#extensions#tabline#enabled = 1
-nmap <C-j> <Plug>AirlineSelectPrevTab
-nmap <C-k> <Plug>AirlineSelectNextTabn
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme = 'minimalist'
 
 " fern
 let g:fern_disable_startup_warnings = 1
