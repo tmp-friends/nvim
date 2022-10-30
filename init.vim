@@ -11,6 +11,16 @@ set noswapfile
 set completeopt=menuone,noinsert
 set clipboard+=unnamed
 
+" Window Mappings
+nnoremap gj <C-w>j
+nnoremap gk <C-w>k
+nnoremap gl <C-w>l
+nnoremap gh <C-w>h
+nnoremap gJ <C-w>J
+nnoremap gK <C-w>K
+nnoremap gL <C-w>L
+nnoremap gH <C-w>H
+
 " IME Switching
 " let &shell='/usr/bin/bash --login'
 " autocmd InsertLeave * :call system('${zenhan} 0')
@@ -39,6 +49,8 @@ call plug#begin('~/.vim/plugged')
   " Fuzzy Finder
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
+  " Cusor Movement
+  Plug 'easymotion/vim-easymotion'
   " Simple Edit Surround
   Plug 'tpope/vim-surround'
   " Trim WhiteSpace
@@ -67,27 +79,19 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 nmap <silent> <c-j> <Plug>(coc-definition)
-nmap <silent> <c-w><c-h> :call CocAction('jumpDefinition', 'split')<CR>
-nmap <silent> <c-w><c-v> :call CocAction('jumpDefinition', 'vsplit')<CR>
+nmap <silent> <c-w><c-s> :call CocAction('jumpDefinition', 'split')<CR>
+nmap <silent> <c-w><c-h> :call CocAction('jumpDefinition', 'vsplit')<CR>
 nmap <silent> <c-w><c-t> :call CocAction('jumpDefinition', 'tabe')<CR>
-nmap <silent> gh <Plug>(coc-float-hide)
+" nmap <silent> gh <Plug>(coc-float-hide)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1, 1) : "\<C-f>"
-nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0, 1) : "\<C-b>"
-inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1, 1)\<cr>" : "\<Right>"
-inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0, 1)\<cr>" : "\<Left>"
-vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1, 1) : "\<C-f>"
-vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0, 1) : "\<C-b>"
 
-" default
 colorscheme default
 
 " vim-airline
-let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'minimalist'
 
 " fern
@@ -116,6 +120,10 @@ let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-h': 'split',
   \ 'ctrl-s': 'vsplit' }
+
+" vim-easymotion
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+nmap <C-s> <Plug>(easymotion-s2)
 
 " vim-trailing-whitespace
 autocmd BufWritePre * :FixWhitespace
