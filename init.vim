@@ -97,7 +97,7 @@ let g:fern#renderer = 'nerdfont'
 nmap <silent> <C-e> :Fern . -reveal=% -drawer -toggle -width=30<CR>
 
 function! s:init_fern() abort
-    nmap <buffer> h <Plug>(fern-action-open:split)
+    nmap <buffer> s <Plug>(fern-action-open:split)
 endfunction
 
 augroup fern-custom
@@ -107,25 +107,23 @@ augroup fern-custom
 augroup END
 
 " fzf
-nnoremap <C-p>p :GFiles<CR>
-nnoremap <C-p>f :Files<CR>
+nnoremap <C-p><C-p> :GFiles<CR>
+nnoremap <C-p>p :Files<CR>
 nnoremap <C-p>c :Commits<CR>
 nnoremap <C-p>b :Buffers<CR>
 let g:fzf_buffers_jump = 1
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-h': 'split',
-  \ 'ctrl-e': 'vsplit' }
+  \ 'ctrl-s': 'vsplit' }
 
 " vim-trailing-whitespace
 autocmd BufWritePre * :FixWhitespace
 
 " neoterm
-let g:neoterm_autoinsert = 1
 let g:neoterm_autoscroll = 1
-let g:neoterm_default_mod = 'belowright'
+let g:neoterm_default_mod = 'tab'
 nnoremap <C-t><C-t> :Ttoggle<CR>
-nnoremap <C-t>t :OpenNTerm t<CR>
 nnoremap <C-t>h :OpenNTerm h<CR>
 nnoremap <C-t>s :OpenNTerm s<CR>
 tnoremap <C-t><C-t> <C-\><C-n>:Ttoggle<CR>
@@ -136,9 +134,7 @@ function! s:open_nterm(open_type)
   let l:tmp = g:neoterm_default_mod
   echo a:open_type
 
-  if a:open_type == 't'
-    let g:neoterm_default_mod = 'tab'
-  elseif a:open_type == 'h'
+  if a:open_type == 'h'
     let g:neoterm_default_mod = 'aboveleft'
   elseif a:open_type == 's'
     let g:neoterm_default_mod = 'vertical'
