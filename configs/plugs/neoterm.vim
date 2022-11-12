@@ -1,4 +1,5 @@
 let g:neoterm_autoscroll = 1
+let g:neoterm_autoinsert = 1
 let g:neoterm_default_mod = 'tab'
 
 nnoremap <C-t><C-t> :Ttoggle<CR>
