@@ -2,6 +2,7 @@
 call plug#begin('~/.config/nvim/plugged')
   " Language Server Protocol
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'yaegassy/coc-intelephense', {'do': 'yarn install --frozen-lockfile'}
   " Colorscheme
   Plug 'EdenEast/nightfox.nvim'
   "Customize Status Bar
