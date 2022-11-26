@@ -27,6 +27,8 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-surround'
   " Trim WhiteSpace
   Plug 'bronson/vim-trailing-whitespace'
+  " Prepare Template For Easy Coding
+  Plug 'mattn/vim-sonictemplate'
   " Use Git
   Plug 'tpope/vim-fugitive'
   " Use Terminal
