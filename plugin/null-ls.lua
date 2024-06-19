@@ -3,9 +3,11 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 null_ls.setup({
 	diagnostics_format = "[#{m}] #{s} (#{c})",
 	sources = {
-		null_ls.builtins.formatting.black, -- python formatter
-		null_ls.builtins.formatting.isort, -- python import sort
-		null_ls.builtins.diagnostics.flake8, -- python linter
+		null_ls.builtins.formatting.black.with({
+      extra_args = { "--line-length", "88" }
+    }), -- python formatter
+		-- null_ls.builtins.formatting.isort, -- python import sort
+		-- null_ls.builtins.diagnostics.flake8, -- python linter
 	},
   on_attach = function(client, bufnr)
     if client.supports_method("textDocument/formatting") then
