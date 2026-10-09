@@ -1,61 +1,65 @@
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
+local lazy_path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.uv.fs_stat(lazy_path) then
+  local output = vim.fn.system({
+    "git", "clone", "--filter=blob:none", "--branch=stable",
+    "https://github.com/folke/lazy.nvim.git", lazy_path,
+  })
+  assert(vim.v.shell_error == 0, "Failed to install lazy.nvim: " .. output)
 end
+vim.opt.rtp:prepend(lazy_path)
 
-local packer_bootstrap = ensure_packer()
-
-return require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'
-
-  -- My plugins here
-  -- UserInterface
-  use {'dracula/vim', as = 'dracula'} -- Color scheme
-  use 'nvim-lualine/lualine.nvim' -- Status line
-
-  -- LSP
-  use {
-    'williamboman/mason.nvim',
-    'williamboman/mason-lspconfig.nvim',
-    'neovim/nvim-lspconfig',
-  }
-  use({ "jose-elias-alvarez/null-ls.nvim", requires = "nvim-lua/plenary.nvim" })
-
-  -- cmp
-  use {
-    'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-path',
-    'hrsh7th/cmp-cmdline',
-    'hrsh7th/nvim-cmp',
-  }
-
-  -- Syntax highlight
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = function()
-        local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-        ts_update()
-    end,
-  }
-
-  use {
-    'windwp/nvim-autopairs',
+require("lazy").setup({
+  {
+    "dracula/vim",
+    name = "dracula",
+    priority = 1000,
+    config = function() vim.cmd.colorscheme("dracula") end,
+  },
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = { options = { theme = "dracula" } },
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+    },
+    config = function() require("completion") end,
+  },
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      { "mason-org/mason.nvim", opts = {} },
+      "mason-org/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
+    },
+    config = function() require("lsp") end,
+  },
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = { python = { "black" } },
+      formatters = { black = { prepend_args = { "--line-length", "88" } } },
+      format_on_save = { timeout_ms = 3000, lsp_format = "never" },
+    },
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
+    build = ":TSUpdate",
+    config = function() require("treesitter") end,
+  },
+  {
+    "windwp/nvim-autopairs",
     event = "InsertEnter",
-    config = function()
-      require("nvim-autopairs").setup {}
-    end
-  }
-
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if packer_bootstrap then
-    require('packer').sync()
-  end
-end)
+    opts = {},
+  },
+}, {
+  lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json",
+  rocks = { enabled = false },
+  checker = { enabled = false },
+  change_detection = { notify = false },
+})
